@@ -2,9 +2,9 @@ import argparse
 from timeit import default_timer as timer
 from aimacode.search import InstrumentedProblem
 from aimacode.search import (breadth_first_search, astar_search,
-    breadth_first_tree_search, depth_first_graph_search, uniform_cost_search,
-    greedy_best_first_graph_search, depth_limited_search,
-    recursive_best_first_search)
+                             breadth_first_tree_search, depth_first_graph_search, uniform_cost_search,
+                             greedy_best_first_graph_search, depth_limited_search,
+                             recursive_best_first_search)
 from my_air_cargo_problems import air_cargo_p1, air_cargo_p2, air_cargo_p3
 
 PROBLEM_CHOICE_MSG = """
@@ -107,7 +107,7 @@ def show_solution(node, elapsed_time):
         print("{}{}".format(action.name, action.args))
 
 if __name__=="__main__":
-    parser = argparse.ArgumentParser(description="Solve air cargo planning problems " + 
+    parser = argparse.ArgumentParser(description="Solve air cargo planning problems " +
         "using a variety of state space search methods including uninformed, greedy, " +
         "and informed heuristic search.")
     parser.add_argument('-m', '--manual', action="store_true",

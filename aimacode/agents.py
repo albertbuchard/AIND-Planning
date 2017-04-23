@@ -35,7 +35,7 @@ EnvCanvas ## Canvas to display the environment of an EnvGUI
 #
 # Speed control in GUI does not have any effect -- fix it.
 
-from .grid import distance2
+from grid import distance2
 from statistics import mean
 
 import random
@@ -163,6 +163,7 @@ def rule_match(state, rules):
             return rule
 
 # ______________________________________________________________________________
+
 
 loc_A, loc_B = (0, 0), (1, 0)  # The two locations for the Vacuum world
 
@@ -322,6 +323,7 @@ class Environment(object):
         if thing in self.agents:
             self.agents.remove(thing)
 
+
 class Direction():
     '''A direction class for agents that want to move in a 2D plane
         Usage:
@@ -364,13 +366,13 @@ class Direction():
     def move_forward(self, from_location):
         x, y = from_location
         if self.direction == self.R:
-            return (x+1, y)
+            return (x + 1, y)
         elif self.direction == self.L:
-            return (x-1, y)
+            return (x - 1, y)
         elif self.direction == self.U:
-            return (x, y-1)
+            return (x, y - 1)
         elif self.direction == self.D:
-            return (x, y+1)
+            return (x, y + 1)
 
 
 class XYEnvironment(Environment):
@@ -454,13 +456,13 @@ class XYEnvironment(Environment):
             has at least one item of the same class'''
         if (self.is_inbounds(location)):
             if (exclude_duplicate_class_items and
-                any(isinstance(t, thing.__class__) for t in self.list_things_at(location))):
-                    return
+                    any(isinstance(t, thing.__class__) for t in self.list_things_at(location))):
+                return
             super(XYEnvironment, self).add_thing(thing, location)
 
     def is_inbounds(self, location):
         '''Checks to make sure that the location is inbounds (within walls if we have walls)'''
-        x,y = location
+        x, y = location
         return not (x < self.x_start or x >= self.x_end or y < self.y_start or y >= self.y_end)
 
     def random_location_inbounds(self, exclude=None):
@@ -521,12 +523,12 @@ class Wall(Obstacle):
     pass
 
 
-
 # ______________________________________________________________________________
 # Continuous environment
 
 class ContinuousWorld(Environment):
     """ Model for Continuous World. """
+
     def __init__(self, width=10, height=10):
         super(ContinuousWorld, self).__init__()
         self.width = width
@@ -636,14 +638,18 @@ class Gold(Thing):
         return rhs.__class__ == Gold
     pass
 
+
 class Bump(Thing):
     pass
+
 
 class Glitter(Thing):
     pass
 
+
 class Pit(Thing):
     pass
+
 
 class Breeze(Thing):
     pass
@@ -652,6 +658,7 @@ class Breeze(Thing):
 class Arrow(Thing):
     pass
 
+
 class Scream(Thing):
     pass
 
@@ -659,6 +666,7 @@ class Scream(Thing):
 class Wumpus(Agent):
     screamed = False
     pass
+
 
 class Stench(Thing):
     pass
@@ -676,7 +684,7 @@ class Explorer(Agent):
 
 
 class WumpusEnvironment(XYEnvironment):
-    pit_probability = 0.2 # Probability to spawn a pit in a location. (From Chapter 7.2)
+    pit_probability = 0.2  # Probability to spawn a pit in a location. (From Chapter 7.2)
     # Room should be 4x4 grid of rooms. The extra 2 for walls
 
     def __init__(self, agent_program, width=6, height=6):
@@ -709,7 +717,7 @@ class WumpusEnvironment(XYEnvironment):
 
         "GOLD"
         self.add_thing(Gold(), self.random_location_inbounds(exclude=(1, 1)), True)
-        #self.add_thing(Gold(), (2,1), True)  Making debugging a whole lot easier
+        # self.add_thing(Gold(), (2,1), True)  Making debugging a whole lot easier
 
         "AGENT"
         self.add_thing(Explorer(program), (1, 1), True)
@@ -739,7 +747,6 @@ class WumpusEnvironment(XYEnvironment):
         '''Gold only glitters in its cell'''
         if location != agent.location:
             thing_percepts[Gold] = None
-
 
         result = [thing_percepts.get(thing.__class__, thing) for thing in self.things
                   if thing.location == location and isinstance(thing, tclass)]
@@ -819,18 +826,18 @@ class WumpusEnvironment(XYEnvironment):
     def is_done(self):
         '''The game is over when the Explorer is killed
             or if he climbs out of the cave only at (1,1)'''
-        explorer = [agent for agent in self.agents if isinstance(agent, Explorer) ]
+        explorer = [agent for agent in self.agents if isinstance(agent, Explorer)]
         if len(explorer):
-                if explorer[0].alive:
-                       return False
-                else:
-                    print("Death by {} [-1000].".format(explorer[0].killed_by))
+            if explorer[0].alive:
+                return False
+            else:
+                print("Death by {} [-1000].".format(explorer[0].killed_by))
         else:
             print("Explorer climbed out {}."
                   .format("with Gold [+1000]!" if Gold() not in self.things else "without Gold [+0]"))
         return True
 
-    #Almost done. Arrow needs to be implemented
+    # Almost done. Arrow needs to be implemented
 # ______________________________________________________________________________
 
 
@@ -854,6 +861,7 @@ def test_agent(AgentFactory, steps, envs):
     return mean(map(score, envs))
 
 # _________________________________________________________________________
+
 
 __doc__ += """
 >>> a = ReflexVacuumAgent()

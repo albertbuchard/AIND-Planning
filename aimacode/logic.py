@@ -31,11 +31,11 @@ And a few other functions:
     diff, simp       Symbolic differentiation and simplification
 """
 
-from .utils import (
+from utils import (
     removeall, unique, first, argmax, probability,
     isnumber, issequence, Symbol, Expr, expr, subexpressions
 )
-import aimacode.agents as agents
+import agents as agents
 
 import itertools
 import random
@@ -180,6 +180,7 @@ def parse_definite_clause(s):
     else:
         antecedent, consequent = s.args
         return conjuncts(antecedent), consequent
+
 
 # Useful constant Exprs used in examples and code:
 A, B, C, D, E, F, G, P, Q, x, y, z = map(Expr, 'ABCDEFGPQxyz')
@@ -396,6 +397,7 @@ def associate(op, args):
     else:
         return Expr(op, *args)
 
+
 _op_identity = {'&': True, '|': False, '+': 0, '*': 1}
 
 
@@ -443,7 +445,7 @@ def pl_resolution(KB, alpha):
     while True:
         n = len(clauses)
         pairs = [(clauses[i], clauses[j])
-                 for i in range(n) for j in range(i+1, n)]
+                 for i in range(n) for j in range(i + 1, n)]
         for (ci, cj) in pairs:
             resolvents = pl_resolve(ci, cj)
             if False in resolvents:
@@ -516,6 +518,7 @@ def pl_fc_entails(KB, q):
                 if count[c] == 0:
                     agenda.append(c.args[1])
     return False
+
 
 """ [Figure 7.13]
 Simple inference in a wumpus world example
@@ -698,7 +701,7 @@ def SAT_plan(init, transition, goal, t_max, SAT_solver=dpll_satisfiable):
         # Symbol claiming state s at time t
         state_counter = itertools.count()
         for s in states:
-            for t in range(time+1):
+            for t in range(time + 1):
                 state_sym[s, t] = Expr("State_{}".format(next(state_counter)))
 
         # Add initial state axiom
@@ -717,11 +720,11 @@ def SAT_plan(init, transition, goal, t_max, SAT_solver=dpll_satisfiable):
                     action_sym[s, action, t] = Expr("Transition_{}".format(next(transition_counter)))
 
                     # Change the state from s to s_
-                    clauses.append(action_sym[s, action, t] |'==>'| state_sym[s, t])
-                    clauses.append(action_sym[s, action, t] |'==>'| state_sym[s_, t + 1])
+                    clauses.append(action_sym[s, action, t] | '==>' | state_sym[s, t])
+                    clauses.append(action_sym[s, action, t] | '==>' | state_sym[s_, t + 1])
 
         # Allow only one state at any time
-        for t in range(time+1):
+        for t in range(time + 1):
             # must be a state at any time
             clauses.append(associate('|', [state_sym[s, t] for s in states]))
 
@@ -739,7 +742,7 @@ def SAT_plan(init, transition, goal, t_max, SAT_solver=dpll_satisfiable):
             clauses.append(associate('|', [action_sym[tr] for tr in transitions_t]))
 
             for tr in transitions_t:
-                for tr_ in transitions_t[transitions_t.index(tr) + 1 :]:
+                for tr_ in transitions_t[transitions_t.index(tr) + 1:]:
                     # there cannot be two transitions tr and tr_ at time t
                     clauses.append(~action_sym[tr] | ~action_sym[tr_])
 
@@ -866,6 +869,7 @@ def standardize_variables(sentence, dic=None):
     else:
         return Expr(sentence.op,
                     *[standardize_variables(a, dic) for a in sentence.args])
+
 
 standardize_variables.counter = itertools.count()
 

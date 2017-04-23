@@ -4,12 +4,11 @@ The way to use this code is to subclass Problem to create a class of problems,
 then create problem instances and solve them with calls to the various search
 functions."""
 
-from .utils import (
-    is_in, argmin, argmax, argmax_random_tie, probability,
-    weighted_sample_with_replacement, memoize, print_table, DataFile, Stack,
-    FIFOQueue, PriorityQueue, name
-)
-from .grid import distance
+from './utils.py' import (is_in, argmin, argmax, argmax_random_tie, probability,
+                   weighted_sample_with_replacement, memoize, print_table, DataFile, Stack,
+                   FIFOQueue, PriorityQueue, name
+                   )
+from grid import distance
 
 from collections import defaultdict
 import math
